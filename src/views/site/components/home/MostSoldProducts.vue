@@ -12,8 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { data } from '../../../data';
-import type { Product } from '../../../types/product';
+import { data } from '../../../../data';
+import type { Product } from '../../../../types/product';
 import ProductList from '../ProductList.vue';
 
 const products: Product[] = data.products;

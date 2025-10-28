@@ -17,7 +17,7 @@
             <input
               type="submit"
               value="Enviar"
-              class="w-full md:w-50 px-6 py-5 bg-blue-600 text-white border-0 rounded-sm cursor-pointer"
+              class="w-60 md:w-50 px-6 py-5 bg-blue-600 text-white border-0 rounded-sm cursor-pointer"
             />
           </form>
         </div>
