@@ -59,7 +59,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Product } from "../../types/product";
+import type { Product } from "../../../types/product";
+
 
 const props = defineProps<{
   data: Product & { discount?: number; isNew?: boolean; description?: string };

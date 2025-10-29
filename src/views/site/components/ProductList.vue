@@ -8,10 +8,6 @@
 import type { Product } from '../../../types/product';
 import ProductItem from './ProductItem.vue';
 
-
-
-
-
 defineProps<{
   list: Product[];
 }>();
