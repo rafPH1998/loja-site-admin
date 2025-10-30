@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
-        <div class="text-3xl">
-            <strong>99</strong> Produtos
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center ">
+        <div class="text-3xl ">
+            <strong>{{ data.products.length }}</strong> Produto(s)
         </div>
         <div class="w-full md:max-w-80 flex flex-row gap-5">
             <select
@@ -28,17 +28,15 @@
         <div
             :class="[
                 filterOpened ? 'block' : 'hidden',
-                'md:block flex-1 md:max-w-80 bg-red-300'
+                'md:block flex-1 md:max-w-80 bg-white p-5 rounded shadow h-full'
             ]"
         >
-            Filtro
+            <FilterGroup :groupId="1" :item="{ id: 'tech', label: 'Nodejs' }" />
+            <FilterGroup :groupId="2" :item="{ id: 'color', label: 'Azul' }" />
         </div>
 
-        <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>....</div>
-            <div>....</div>
-            <div>....</div>
-            <div>....</div>
+        <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <ProductItem v-for="item in data.products" :key="item.id" :data="item" />
         </div>
     </div>
 </template>
@@ -46,6 +44,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import FilterGroup from './FilterGroup.vue'
+import { data } from '../../../../data'
+import ProductItem from '../ProductItem.vue'
 
 const router = useRouter()
 const route = useRoute()
