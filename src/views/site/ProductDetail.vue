@@ -102,7 +102,7 @@
   
             <!-- Actions -->
             <div class="flex gap-3 pt-4">
-              <button @click="handleAddToCart" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2">
+              <button @click="addToCart()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2">
                 <ShoppingCart class="w-5 h-5" />
                 Adicionar ao Carrinho
               </button>
@@ -265,7 +265,7 @@ import { data } from '../../data';
   const specsEntries = computed(() => Object.entries(productData.specifications));
   
   /* ações */
-  const handleAddToCart = () => {
+  const addToCart = () => {
     alert(`${quantity.value}x ${productData.name} (Cor: ${selectedColor.value}) adicionado ao carrinho!`);
   };
   
