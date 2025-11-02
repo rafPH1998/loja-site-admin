@@ -38,9 +38,9 @@
         {{ data.description }}
       </div>
 
-      <div class="flex items-center gap-2 mt-2">
+      <router-link :to="`/product/${data.id}`" class="flex items-center gap-2 mt-2">
         <template v-if="data.discount">
-          <span class="text-2xl font-bold text-blue-600">
+          <span class="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
             R$ {{ (data.price * (1 - data.discount / 100)).toFixed(2) }}
           </span>
           <span class="text-sm line-through text-gray-400">
@@ -48,9 +48,9 @@
           </span>
         </template>
         <template v-else>
-          <span class="text-2xl font-bold text-blue-600">R$ {{ data.price.toFixed(2) }}</span>
+          <span class="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">R$ {{ data.price.toFixed(2) }}</span>
         </template>
-      </div>
+      </router-link>
 
       <div class="text-gray-400 text-sm">Em até 12x no cartão</div>
     </div>
