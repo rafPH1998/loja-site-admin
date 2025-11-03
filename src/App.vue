@@ -10,7 +10,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Header from './views/site/layout/Header.vue'
 import Footer from './views/site/layout/Footer.vue'
+import { useStoreHydration } from './composables/useStoreHydration';
+
+useStoreHydration()
 </script>
