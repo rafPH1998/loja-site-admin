@@ -100,6 +100,8 @@
               </div>
             </div>
   
+            {{ cartStore.cart.length }}
+
             <!-- Actions -->
             <div class="flex gap-3 pt-4">
               <button @click="addToCart()" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2">
@@ -189,6 +191,8 @@
   } from 'lucide-vue-next';
 import ProductList from './components/ProductList.vue';
 import { data } from '../../data';
+import { useCartStore } from '../../stores/cart';
+import { setCartState } from '../../actions/set-cart-state';
   
   /* ---------- Dados (copiados do original) ---------- */
   const productData = {
@@ -250,6 +254,8 @@ import { data } from '../../data';
       },
     ],
   };
+
+  const cartStore = useCartStore()
   
   /* ---------- estado local ---------- */
   const selectedImage = ref(0);
@@ -265,8 +271,10 @@ import { data } from '../../data';
   const specsEntries = computed(() => Object.entries(productData.specifications));
   
   /* ações */
-  const addToCart = () => {
-    alert(`${quantity.value}x ${productData.name} (Cor: ${selectedColor.value}) adicionado ao carrinho!`);
+  const addToCart = async () => {
+    cartStore.addItem({ productId: productData.id, quantity: 1})
+    const updatedCart = cartStore.cart;
+    await setCartState(updatedCart)
   };
   
   const increment = () => (quantity.value += 1);

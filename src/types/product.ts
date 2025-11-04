@@ -4,4 +4,6 @@ export type Product = {
     image: string;
     price: number;
     liked?: boolean;
+    quantity?: number;
+    code?: string;
 }
