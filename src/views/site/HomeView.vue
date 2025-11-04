@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-7xl mx-auto p-6">
+  <div class="w-full max-w-7xl mx-auto p-6 mt-32">
     <Banners :list="banners" />
 
     <!-- Cards de informações -->

@@ -16,15 +16,8 @@
     </div>
 
     <router-link :to="`/product/${data.id}`" class="block relative">
-      <img :src="data.image" :alt="data.label"
-        class="w-full h-64 object-contain transition-transform duration-300 group-hover:scale-105" />
-
-      <div
-        class="absolute inset-0 bg-black bg-opacity-25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center">
-        <button
-          class="bg-blue-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-blue-700 transition-colors shadow-lg">
-          Adicionar ao carrinho
-        </button>
+      <img :src="data.image" :alt="data.label" class="w-full h-64 object-contain transition-transform duration-300 group-hover:scale-105" />
+      <div class="absolute inset-0 bg-black bg-opacity-25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center">
       </div>
     </router-link>
 
@@ -38,6 +31,16 @@
         {{ data.description }}
       </div>
 
+      <div>
+        <button
+          @click="handleAddToCart"
+          class="flex items-center justify-center bg-blue-600 text-white px-1 py-1 w-full  rounded-md font-semibold hover:bg-blue-700 transition-colors shadow-lg"
+        >
+          <ShoppingCart class="w-5 h-5 mr-2" />
+          <span class="text-xs">Adicionar ao carrinho</span>
+        </button>
+      </div>
+
       <router-link :to="`/product/${data.id}`" class="flex items-center gap-2 mt-2">
         <template v-if="data.discount">
           <span class="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
@@ -48,7 +51,8 @@
           </span>
         </template>
         <template v-else>
-          <span class="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">R$ {{ data.price.toFixed(2) }}</span>
+          <span class="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">R$ {{
+            data.price.toFixed(2) }}</span>
         </template>
       </router-link>
 
@@ -60,11 +64,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Product } from "../../../types/product";
+import { useCartStore } from "../../../stores/cart";
+import { setCartState } from "../../../actions/set-cart-state";
+import { ShoppingCart } from "lucide-vue-next";
 
 
 const props = defineProps<{
   data: Product & { discount?: number; isNew?: boolean; description?: string };
 }>();
+
+const cartStore = useCartStore()
+
+const handleAddToCart = async () => {
+  cartStore.addItem({ productId: props.data.id, quantity: 1 })
+  const updatedCart = cartStore.cart;
+  await setCartState(updatedCart)
+};
 
 const liked = ref(props.data.liked);
 
