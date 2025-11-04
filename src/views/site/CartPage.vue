@@ -1,12 +1,12 @@
 <template>
-    <div class="container mx-auto p-6">
+    <div class="container mx-auto p-6 mt-40">
         <div class="flex items-center mb-8">
             <ShoppingBag class="w-6 h-6 mr-2 text-gray-700" />
             <h1 class="text-xl font-semibold text-gray-800">Sua sacola de compras ({{ cartItemCount }} itens)</h1>
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8">
-            <div class="lg:w-2/3 bg-white p-6 rounded-lg shadow-md">
+            <div class="lg:w-2/3 bg-white p-6 rounded-lg shadow-md h-full">
                 <div
                     class="hidden sm:flex items-center pb-2 border-b border-gray-300 text-sm font-medium text-gray-500">
                     <span class="w-1/2">Produto</span>
@@ -14,7 +14,6 @@
                     <span class="w-1/4 text-right pr-12">Preço</span>
                 </div>
 
-                {{ cartItems }}
                 <!-- Itens do Carrinho -->
                 <div v-if="cartItemCount > 0">
                     <div v-for="item in cartItems" :key="item.id"
@@ -121,6 +120,7 @@ import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-vue-next';
 import { useCartStore } from '../../stores/cart';
 import { useProductStore } from '../../stores/products';
 import type { Product } from '../../types/product';
+import { setCartState } from '../../actions/set-cart-state';
 
 let initialCart = useCartStore()
 const stateProduct = useProductStore();
@@ -143,16 +143,14 @@ const products = await stateProduct.getProductsFromList(ids) */
 
 
 // Mapeia os itens do carrinho mockados para a estrutura CartProduct
-
+const updateCookie = async () => {
+    const updatedCart = initialCart.cart
+    await setCartState(updatedCart)
+}
 
 async function loadCartItems() {
-    const mockCartItems = [
-        { productId: 1, quantity: 2 },
-        { productId: 2, quantity: 1 },
-    ];
-
     const items = await Promise.all(
-        mockCartItems.map(async (item) => {
+        initialCart.cart.map(async (item) => {
             const product = await stateProduct.getProductById(item.productId);
             return product
                 ? { ...product, quantity: item.quantity }
@@ -165,21 +163,26 @@ async function loadCartItems() {
 
 // --- Funções de Manipulação do Carrinho ---
 
-const updateQuantity = (productId: number, change: number) => {
-    const item = cartItems.value.find(i => i.id === productId);
-    if (item) {
-        const newQuantity = item.quantity + change;
-        if (newQuantity > 0) {
-            item.quantity = newQuantity;
-        } else {
-            // Remove o item se a quantidade for 0 ou menos
-            removeItem(productId);
-        }
-    }
-};
+const updateQuantity = async (productId: number, change: number) => {
+  const item = cartItems.value.find(i => i.id === productId);
+  if (item) {
+    const newQuantity = item.quantity + change;
 
-const removeItem = (productId: number) => {
+    if (newQuantity > 0) {
+      item.quantity = newQuantity;
+      initialCart.updateQuantity(item.id, newQuantity);
+    } else {
+      removeItem(productId);
+    }
+  }
+
+  await updateCookie();
+}
+
+const removeItem = async (productId: number) => {
     cartItems.value = cartItems.value.filter(item => item.id !== productId);
+    initialCart.removeItem(productId)
+    await updateCookie()
 };
 
 // --- Cálculos e Resumo ---
